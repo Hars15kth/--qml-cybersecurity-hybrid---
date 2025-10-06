@@ -1,0 +1,15 @@
+# Ignore raw data files over 100MB
+/data/*.zip
+/data/UNSW-NB15_*.csv
+/data/NUSW-NB15_*.csv
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Ignore system files
+Thumbs.db
+.DS_Store
