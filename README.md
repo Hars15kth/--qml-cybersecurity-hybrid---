@@ -1,74 +1,79 @@
+You’re right. Here is the complete README as one continuous block of GitHub-ready Markdown, with no outer code cell.
+
 # Hilbert-Space Intrusion Classification on UNSW-NB15
 
-A mathematically structured intrusion-detection pipeline that maps network telemetry into a compact nonlinear feature space before classification. The system applies parameterised rotation operators and coupled feature interactions, extracts observable coordinates, and trains lightweight PyTorch decision heads under leakage-safe experimental controls.
+A mathematically structured intrusion-detection pipeline that maps network telemetry into a compact nonlinear representation before classification. The system applies parameterised rotation operators, coupled feature interactions, observable projection, and lightweight PyTorch decision heads under leakage-safe experimental controls.
 
-The repository investigates whether operator-defined embeddings can improve the separation of benign and malicious network traffic while remaining computationally efficient, reproducible, and compatible with downstream cybersecurity analytics and AI-agent workflows.
+The repository investigates whether low-dimensional operator-defined embeddings can preserve the nonlinear structure required to distinguish benign and malicious traffic while remaining computationally efficient, reproducible, and compatible with existing cybersecurity analytics and AI-agent workflows.
 
 ## Mathematical Formulation
 
-Given a standardised network-traffic vector
+Let a standardised network-flow observation be represented by
 
-\[
-x \in \mathbb{R}^{d},
-\]
+$$
+x \in \mathbb{R}^{d}.
+$$
 
-selected components are embedded through a sequence of parameterised rotations and coupling operators:
+Selected coordinates are embedded through a composition of parameterised rotations and coupling operators:
 
-\[
+$$
 U(x)
-=
+====
+
 \prod_{\ell=1}^{L}
 \left[
 U_{\mathrm{couple}}
 \prod_{j=1}^{q} R_Y(x_j)
 \right],
-\]
+$$
 
 where:
 
-- \(q=5\) is the latent embedding dimension;
-- \(R_Y(x_j)\) applies a nonlinear coordinate-wise transformation;
-- \(U_{\mathrm{couple}}\) introduces interactions between neighbouring latent coordinates;
-- \(L\) denotes the number of feature-map layers.
+* $q=5$ is the latent embedding dimension;
+* $R_Y(x_j)$ applies a nonlinear coordinate-dependent rotation;
+* $U_{\mathrm{couple}}$ introduces interactions between neighbouring latent coordinates;
+* $L$ denotes the number of feature-map layers.
 
 The transformed state is projected onto an observable basis:
 
-\[
+$$
 \phi(x)
-=
+=======
+
 \left[
 \langle Z_1\rangle_x,
 \langle Z_2\rangle_x,
 \ldots,
 \langle Z_q\rangle_x
 \right].
-\]
+$$
 
 This defines a compact Hilbert-space representation
 
-\[
+$$
 \phi(x)\in[-1,1]^5,
-\]
+$$
 
-which is supplied to a shallow neural classifier:
+which is supplied to a trainable decision function:
 
-\[
-\hat{y}
-=
-f_{\theta}\!\left(\phi(x)\right),
-\]
+$$
+\hat{p}(x)
+==========
 
-where \(\hat{y}\) is the predicted intrusion probability and \(f_{\theta}\) is a trainable PyTorch decision head.
+f_{\theta}!\left(\phi(x)\right),
+$$
+
+where $\hat{p}(x)$ is the estimated probability that the network-flow observation is malicious and $f_{\theta}$ is a lightweight PyTorch classification head.
 
 ## Results
 
-- **Dataset:** UNSW-NB15
-- **Scale:** approximately 2.54 million network-flow observations and 49 attributes
-- **ROC-AUC:** 0.999
-- **F1 score:** 0.9496
-- **Embedding dimension:** five observable coordinates
-- **Evaluation:** leakage-safe train, validation, and test separation
-- **Operating modes:** balanced classification and high-recall intrusion detection
+* **Dataset:** UNSW-NB15
+* **Scale:** approximately 2.54 million network-flow observations and 49 attributes
+* **ROC-AUC:** 0.999
+* **F1 score:** 0.9496
+* **Embedding dimension:** five observable coordinates
+* **Evaluation:** leakage-safe train, validation, and test partitions
+* **Operating modes:** balanced classification and high-recall intrusion detection
 
 ## Cybersecurity Relevance
 
@@ -76,61 +81,66 @@ The embedding layer compresses heterogeneous network-flow attributes into a stru
 
 The resulting detection component supports:
 
-- network-intrusion scoring;
-- anomalous-flow prioritisation;
-- alert ranking and triage;
-- high-recall threat screening;
-- downstream security-agent reasoning;
-- integration with rule-based, neural, graph-based, or ensemble detection systems.
+* network-intrusion scoring;
+* anomalous-flow prioritisation;
+* alert ranking and triage;
+* high-recall threat screening;
+* downstream security-agent reasoning;
+* integration with rule-based, neural, graph-based, or ensemble detection systems.
 
-The feature map and classifier are modular, allowing the pipeline to augment an existing security architecture without replacing its logging, orchestration, policy, or incident-response infrastructure.
+The representation layer and classifier are modular. They can augment an existing cybersecurity architecture without replacing its logging, orchestration, policy, or incident-response infrastructure.
 
 ## Implemented Models
 
 ### Classical Logistic-Regression Baseline
 
-A reference classifier trained on standardised continuous network-traffic features, with an optional categorical feature channel. It provides a transparent benchmark under the same train, validation, and test partitions.
+A reference classifier trained on standardised continuous network-flow features, with an optional categorical feature channel.
 
-### Online Hilbert-Space Hybrid
+The baseline provides a transparent comparison under the same data partitions, preprocessing constraints, and evaluation protocol as the structured embedding models.
 
-Computes the structured nonlinear embedding during execution and supplies the resulting observable coordinates to a two-layer PyTorch classifier:
+### Online Hilbert-Space Classifier
 
-\[
+The online architecture computes the nonlinear representation during execution and supplies the resulting observable coordinates to a two-layer PyTorch classifier:
+
+$$
 x
 \longmapsto
 U(x)
 \longmapsto
 \phi(x)
 \longmapsto
-f_{\theta}\!\left(\phi(x)\right)
+f_{\theta}!\left(\phi(x)\right)
 \longmapsto
-\hat{y}.
-\]
+\hat{p}(x).
+$$
 
-This architecture evaluates whether a low-dimensional operator-defined representation preserves sufficient information for accurate attack discrimination.
+This model tests whether a low-dimensional operator-defined representation preserves sufficient information for accurate attack discrimination.
 
-### Precomputed-Embedding Hybrid
+### Precomputed-Embedding Classifier
 
-Computes the structured representation once and stores the resulting feature matrix:
+The second architecture computes the structured representation once and stores the resulting feature matrix:
 
-\[
+$$
 \Phi
-=
+====
+
 \begin{bmatrix}
-\phi(x_1) \\
-\phi(x_2) \\
-\vdots \\
+\phi(x_1) \
+\phi(x_2) \
+\vdots \
 \phi(x_n)
 \end{bmatrix}
 \in
 \mathbb{R}^{n\times q}.
-\]
+$$
 
-A compact classifier is then trained directly on \(\Phi\). Precomputation removes repeated feature-map simulation from the optimisation loop, enabling faster training and controlled comparison between decision heads.
+A compact neural classifier is then trained directly on $\Phi$.
+
+Precomputation removes repeated feature-map evaluation from the optimisation loop, enabling faster training, controlled comparison between classification heads, and reproducible experimentation.
 
 ## Detection Pipeline
 
-```text
+```
 UNSW-NB15 network telemetry
             |
             v
@@ -159,37 +169,42 @@ PyTorch classification head
             |
             v
 Threshold-calibrated intrusion score
-````
+```
 
-## Decision Rule and Threshold Calibration
+## Decision Rule
 
-For an estimated intrusion probability
+Given an estimated malicious-traffic probability
 
-[
+$$
+\hat{p}(x)
+==========
+
 p_{\theta}(y=1\mid x),
-]
+$$
 
-the final classification is determined by
+the final binary decision is
 
-[
+$$
 \hat{y}_{\tau}
 ==============
 
 \mathbf{1}
 \left[
-p_{\theta}(y=1\mid x)\geq\tau
+\hat{p}(x)\geq\tau
 \right],
-]
+$$
 
-where (\tau) is selected on the validation set according to the required security objective.
+where $\tau$ is a validation-derived operating threshold.
 
-Supported operating modes include:
+The threshold is not assumed to be fixed at $0.5$. It is selected according to the operational objective of the security system.
 
-* **Balanced mode:** selects a threshold that balances precision and recall.
+Supported modes include:
+
+* **Balanced mode:** balances precision and recall for general intrusion classification.
 * **High-recall mode:** prioritises attack coverage and reduces false negatives.
-* **Threshold-analysis mode:** measures classifier behaviour across multiple decision boundaries.
+* **Threshold-analysis mode:** evaluates detection behaviour across multiple operating boundaries.
 
-This is important in cybersecurity settings because the operational cost of a missed intrusion can be significantly greater than the cost of generating an additional alert.
+This is important in cybersecurity environments because the cost of a missed intrusion may be substantially greater than the cost of generating an additional alert.
 
 ## Experimental Controls
 
@@ -199,7 +214,7 @@ The evaluation pipeline includes:
 * explicit train, validation, and test partitions;
 * train-only fitting of preprocessing transformations;
 * leakage-safe feature standardisation;
-* validation-based threshold selection;
+* validation-derived decision thresholds;
 * balanced and high-recall operating points;
 * unified accuracy, precision, recall, F1, ROC-AUC, and PR-AUC reporting;
 * saved preprocessing state;
@@ -221,11 +236,12 @@ The pipeline generates and stores:
 * precomputed embedding matrices;
 * data-partition metadata;
 * selected decision thresholds;
-* model and experiment configurations.
+* model configurations;
+* experiment metadata.
 
 ## Repository Structure
 
-```text
+```
 data/
     Raw and processed UNSW-NB15 data
 
@@ -248,28 +264,34 @@ artifacts_unsw_qdl/
 
 Python 3.10 or later is recommended.
 
-```bash
+Clone the repository:
+
+```
 git clone https://github.com/<username>/<repository>.git
 cd <repository>
+```
 
+Create a virtual environment:
+
+```
 python -m venv .venv
 ```
 
 Activate the environment on Linux or macOS:
 
-```bash
+```
 source .venv/bin/activate
 ```
 
 Activate the environment on Windows:
 
-```bash
+```
 .venv\Scripts\activate
 ```
 
 Install the required packages:
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
@@ -283,7 +305,9 @@ pip install -r requirements.txt
 * Qiskit
 * Matplotlib
 
-Qiskit is used as the numerical backend for constructing and evaluating the parameterised operator map. The cybersecurity classifier consumes only the resulting observable representation and therefore remains compatible with conventional machine-learning and security infrastructure.
+Qiskit is used as the numerical backend for constructing and evaluating the parameterised operator map.
+
+The cybersecurity classifier consumes the resulting observable representation and therefore remains compatible with conventional machine-learning, detection, and security-orchestration infrastructure.
 
 ## Reproducibility
 
@@ -299,7 +323,7 @@ Runtime artefacts include:
 * selected operating thresholds;
 * experiment metadata.
 
-The precomputed-embedding architecture separates representation generation from classifier optimisation, allowing the decision-layer experiments to be reproduced without recomputing the full nonlinear map.
+The precomputed-embedding architecture separates representation generation from classifier optimisation. This allows the decision-layer experiments to be reproduced without recomputing the complete nonlinear map.
 
 ## Research Objective
 
@@ -309,7 +333,7 @@ The repository addresses the following question:
 
 The results indicate that compact structured embeddings can achieve strong separation between benign and malicious network traffic while remaining suitable for modular integration into broader cybersecurity detection, investigation, and agentic decision systems.
 
-```
-```
+
+
 
 
