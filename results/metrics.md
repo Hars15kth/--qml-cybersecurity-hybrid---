@@ -183,7 +183,7 @@ $$
 \begin{aligned}
 \tau
 &=
-0.5,
+0.5
 \end{aligned}
 $$
 
@@ -199,9 +199,9 @@ At this operating point, the model identifies every malicious observation in the
 
 $$
 \begin{aligned}
-\operatorname{Recall}_{\mathrm{attack}}
+\mathrm{Recall}_{\mathrm{attack}}
 &=
-1.0000.
+1.0000
 \end{aligned}
 $$
 
@@ -217,7 +217,7 @@ $$
 \begin{aligned}
 \tau^{\ast}
 &=
-0.8611.
+0.8611
 \end{aligned}
 $$
 
@@ -233,7 +233,7 @@ $$
 \begin{aligned}
 0.8724
 &\longrightarrow
-0.9316,
+0.9316
 \end{aligned}
 $$
 
@@ -243,7 +243,7 @@ $$
 \begin{aligned}
 1.0000
 &\longrightarrow
-0.9684.
+0.9684
 \end{aligned}
 $$
 
@@ -283,21 +283,21 @@ $$
 \phi(x_n)^{\mathsf T}
 \end{bmatrix}
 \in
-\mathbb{R}^{n\times 5}.
+\mathbb{R}^{n\times 5}
 \end{aligned}
 $$
 
 A compact neural decision head is then trained directly on the cached embedding matrix.
 
-| Configuration       |                                  Value |
-| ------------------- | -------------------------------------: |
+| Configuration       | Value                                  |
+| ------------------- | -------------------------------------- |
 | **Encoding**        | Five-coordinate $R_Y$ + CZ feature map |
-| **Representation**  |          Precomputed observable matrix |
-| **Classifier head** |                            48 → 24 → 2 |
-| **Training subset** |           60,000 balanced observations |
-| **Epochs**          |                                     50 |
-| **Batch size**      |                                    256 |
-| **Execution mode**  |                         CPU-compatible |
+| **Representation**  | Precomputed observable matrix          |
+| **Classifier head** | 48 → 24 → 2                            |
+| **Training subset** | 60,000 balanced observations           |
+| **Epochs**          | 50                                     |
+| **Batch size**      | 256                                    |
+| **Execution mode**  | CPU-compatible                         |
 
 The architecture separates representation generation from classifier optimisation:
 
@@ -309,7 +309,7 @@ x
 \
 \phi(x)
 &\longmapsto
-f_{\theta}!\left(\phi(x)\right).
+f_{\theta}!\left(\phi(x)\right)
 \end{aligned}
 $$
 
@@ -328,15 +328,15 @@ The precomputed architecture provides:
 
 # Key Findings
 
-## 1. Strong class separation
+## 1. Strong Class Separation
 
 The online hybrid model achieves
 
 $$
 \begin{aligned}
-\operatorname{ROC\text{-}AUC}_{\mathrm{hybrid}}
+\mathrm{ROC\text{-}AUC}_{\mathrm{hybrid}}
 &=
-0.9990,
+0.9990
 \end{aligned}
 $$
 
@@ -344,9 +344,9 @@ compared with
 
 $$
 \begin{aligned}
-\operatorname{ROC\text{-}AUC}_{\mathrm{baseline}}
+\mathrm{ROC\text{-}AUC}_{\mathrm{baseline}}
 &=
-0.9968.
+0.9968
 \end{aligned}
 $$
 
@@ -354,7 +354,7 @@ Both models operate in a near-saturated discrimination regime, but the hybrid mo
 
 ---
 
-## 2. Compact representation
+## 2. Compact Representation
 
 The hybrid classifier operates on
 
@@ -362,7 +362,7 @@ $$
 \begin{aligned}
 \phi(x)
 &\in
-\mathbb{R}^{5},
+\mathbb{R}^{5}
 \end{aligned}
 $$
 
@@ -372,7 +372,7 @@ The result indicates that the operator-defined feature map preserves substantial
 
 ---
 
-## 3. Threshold selection changes operational behaviour
+## 3. Threshold Selection Changes Operational Behaviour
 
 The same trained model supports different cybersecurity objectives through the choice of $\tau$.
 
@@ -384,10 +384,10 @@ $$
 &=
 0.5
 \quad\Longrightarrow\quad
-\operatorname{Recall}_{\mathrm{attack}}
-=======================================
+\mathrm{Recall}_{\mathrm{attack}}
+=================================
 
-1.0000.
+1.0000
 \end{aligned}
 $$
 
@@ -402,13 +402,13 @@ $$
 F1_{\mathrm{attack}}
 ====================
 
-0.9496.
+0.9496
 \end{aligned}
 $$
 
 ---
 
-## 4. Modular deployment
+## 4. Modular Deployment
 
 The structured representation can operate as:
 
