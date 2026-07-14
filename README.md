@@ -1,5 +1,3 @@
-You’re right. Here is the complete README as one continuous block of GitHub-ready Markdown, with no outer code cell.
-
 # Hilbert-Space Intrusion Classification on UNSW-NB15
 
 A mathematically structured intrusion-detection pipeline that maps network telemetry into a compact nonlinear representation before classification. The system applies parameterised rotation operators, coupled feature interactions, observable projection, and lightweight PyTorch decision heads under leakage-safe experimental controls.
@@ -11,23 +9,26 @@ The repository investigates whether low-dimensional operator-defined embeddings 
 Let a standardised network-flow observation be represented by
 
 $$
-x \in \mathbb{R}^{d}.
+\begin{aligned}
+x &\in \mathbb{R}^{d}
+\end{aligned}
 $$
 
 Selected coordinates are embedded through a composition of parameterised rotations and coupling operators:
 
 $$
+\begin{aligned}
 U(x)
-====
-
+&=
 \prod_{\ell=1}^{L}
 \left[
 U_{\mathrm{couple}}
 \prod_{j=1}^{q} R_Y(x_j)
-\right],
+\right]
+\end{aligned}
 $$
 
-where:
+Here:
 
 * $q=5$ is the latent embedding dimension;
 * $R_Y(x_j)$ applies a nonlinear coordinate-dependent rotation;
@@ -37,30 +38,49 @@ where:
 The transformed state is projected onto an observable basis:
 
 $$
+\begin{aligned}
 \phi(x)
-=======
+&=
+\begin{bmatrix}
+\langle Z_1\rangle_x \
+\langle Z_2\rangle_x \
+\vdots \
+\langle Z_q\rangle_x
+\end{bmatrix}
+\end{aligned}
+$$
 
+Equivalently,
+
+$$
+\begin{aligned}
+\phi(x)
+&=
 \left[
 \langle Z_1\rangle_x,
 \langle Z_2\rangle_x,
 \ldots,
 \langle Z_q\rangle_x
-\right].
+\right]^{\mathsf T}
+\end{aligned}
 $$
 
-This defines a compact Hilbert-space representation
+This defines a compact Hilbert-space representation:
 
 $$
-\phi(x)\in[-1,1]^5,
+\begin{aligned}
+\phi(x) &\in [-1,1]^5
+\end{aligned}
 $$
 
-which is supplied to a trainable decision function:
+The representation is supplied to a trainable decision function:
 
 $$
+\begin{aligned}
 \hat{p}(x)
-==========
-
-f_{\theta}!\left(\phi(x)\right),
+&=
+f_{\theta}!\left(\phi(x)\right)
+\end{aligned}
 $$
 
 where $\hat{p}(x)$ is the estimated probability that the network-flow observation is malicious and $f_{\theta}$ is a lightweight PyTorch classification head.
@@ -103,15 +123,17 @@ The baseline provides a transparent comparison under the same data partitions, p
 The online architecture computes the nonlinear representation during execution and supplies the resulting observable coordinates to a two-layer PyTorch classifier:
 
 $$
+\begin{aligned}
 x
-\longmapsto
+&\longmapsto
 U(x)
 \longmapsto
 \phi(x)
 \longmapsto
 f_{\theta}!\left(\phi(x)\right)
 \longmapsto
-\hat{p}(x).
+\hat{p}(x)
+\end{aligned}
 $$
 
 This model tests whether a low-dimensional operator-defined representation preserves sufficient information for accurate attack discrimination.
@@ -121,17 +143,18 @@ This model tests whether a low-dimensional operator-defined representation prese
 The second architecture computes the structured representation once and stores the resulting feature matrix:
 
 $$
+\begin{aligned}
 \Phi
-====
-
+&=
 \begin{bmatrix}
-\phi(x_1) \
-\phi(x_2) \
+\phi(x_1)^{\mathsf T} \
+\phi(x_2)^{\mathsf T} \
 \vdots \
-\phi(x_n)
+\phi(x_n)^{\mathsf T}
 \end{bmatrix}
 \in
-\mathbb{R}^{n\times q}.
+\mathbb{R}^{n\times q}
+\end{aligned}
 $$
 
 A compact neural classifier is then trained directly on $\Phi$.
@@ -140,7 +163,7 @@ Precomputation removes repeated feature-map evaluation from the optimisation loo
 
 ## Detection Pipeline
 
-```
+```text
 UNSW-NB15 network telemetry
             |
             v
@@ -173,25 +196,27 @@ Threshold-calibrated intrusion score
 
 ## Decision Rule
 
-Given an estimated malicious-traffic probability
+Given an estimated malicious-traffic probability,
 
 $$
+\begin{aligned}
 \hat{p}(x)
-==========
-
-p_{\theta}(y=1\mid x),
+&=
+p_{\theta}(y=1\mid x)
+\end{aligned}
 $$
 
 the final binary decision is
 
 $$
-\hat{y}_{\tau}
-==============
-
+\begin{aligned}
+\hat{y}_{\tau}(x)
+&=
 \mathbf{1}
 \left[
 \hat{p}(x)\geq\tau
-\right],
+\right]
+\end{aligned}
 $$
 
 where $\tau$ is a validation-derived operating threshold.
@@ -241,7 +266,7 @@ The pipeline generates and stores:
 
 ## Repository Structure
 
-```
+```text
 data/
     Raw and processed UNSW-NB15 data
 
@@ -266,32 +291,32 @@ Python 3.10 or later is recommended.
 
 Clone the repository:
 
-```
+```bash
 git clone https://github.com/<username>/<repository>.git
 cd <repository>
 ```
 
 Create a virtual environment:
 
-```
+```bash
 python -m venv .venv
 ```
 
 Activate the environment on Linux or macOS:
 
-```
+```bash
 source .venv/bin/activate
 ```
 
 Activate the environment on Windows:
 
-```
+```powershell
 .venv\Scripts\activate
 ```
 
 Install the required packages:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -332,6 +357,8 @@ The repository addresses the following question:
 > Can an operator-defined, low-dimensional Hilbert-space embedding preserve sufficient nonlinear structure in network telemetry to support accurate and computationally efficient intrusion classification?
 
 The results indicate that compact structured embeddings can achieve strong separation between benign and malicious network traffic while remaining suitable for modular integration into broader cybersecurity detection, investigation, and agentic decision systems.
+
+
 
 
 
