@@ -1,4 +1,3 @@
-````markdown
 # Hilbert-Space Intrusion Classification on UNSW-NB15
 
 A mathematically structured intrusion-detection pipeline that maps network telemetry into a compact nonlinear feature space before classification. The system applies parameterised rotation operators and coupled feature interactions, extracts observable coordinates, and trains lightweight PyTorch decision heads under leakage-safe experimental controls.
